@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ShopSmart AI – India</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ── LANDING HERO ── -->
+  <div class="landing" id="landing">
+    <div class="landing-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="landing-inner">
+      <div class="landing-badge">🇮🇳 AI-Powered Shopping for India</div>
+      <h1 class="landing-title">
+        <span class="title-line">Compare prices.</span>
+        <span class="title-line accent">Save money.</span>
+      </h1>
+      <p class="landing-sub">Instantly compare Flipkart, Amazon, Myntra, Ajio & Meesho. AI recommendations with strict ₹ budget filtering.</p>
+
+      <div class="landing-search">
+        <div class="search-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <input id="landingInput" type="text" placeholder='Try: "wireless earbuds under ₹2000"' />
+        <button id="landingSearch">
+          <span>Search</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+
+      <div class="landing-chips">
+        <button class="lchip" onclick="quickSearch('earbuds under ₹2000')">
+          <span class="lchip-icon">🎧</span> Earbuds under ₹2000
+        </button>
+        <button class="lchip" onclick="quickSearch('smartphone under ₹15000')">
+          <span class="lchip-icon">📱</span> Phone under ₹15000
+        </button>
+        <button class="lchip" onclick="quickSearch('laptop under ₹50000')">
+          <span class="lchip-icon">💻</span> Laptop under ₹50000
+        </button>
+        <button class="lchip" onclick="quickSearch('smartwatch under ₹5000')">
+          <span class="lchip-icon">⌚</span> Watch under ₹5000
+        </button>
+        <button class="lchip" onclick="quickSearch('running shoes under ₹3000')">
+          <span class="lchip-icon">👟</span> Shoes under ₹3000
+        </button>
+      </div>
+
+      <div class="landing-pills">
+        <div class="lpill">
+          <span class="lpill-icon">💰</span> Strict Budget Filter
+        </div>
+        <div class="lpill">
+          <span class="lpill-icon">₹</span> INR Always
+        </div>
+        <div class="lpill">
+          <span class="lpill-icon">🏆</span> AI Score
+        </div>
+        <div class="lpill">
+          <span class="lpill-icon">🛒</span> 5 Platforms
+        </div>
+        <div class="lpill">
+          <span class="lpill-icon">⚡</span> Instant Compare
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN APP SHELL ── -->
+  <div class="app-shell" id="appShell" style="display:none">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="back-btn" id="backBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Home
+        </button>
+        <div class="topbar-brand">Shop<span>Smart</span></div>
+      </div>
+      <div class="topbar-search">
+        <svg class="search-icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="topSearch" type="text" placeholder="Search products with budget..." />
+        <button id="topSearchBtn">Search</button>
+      </div>
+      <div class="topbar-platforms">
+        <span class="platform-tag fk">FK</span>
+        <span class="platform-tag amz">AMZ</span>
+        <span class="platform-tag myn">MYN</span>
+        <span class="platform-tag aji">AJIO</span>
+        <span class="platform-tag mso">MSO</span>
+      </div>
+    </header>
+
+    <!-- Split panel body -->
+    <div class="split-body">
+
+      <!-- LEFT: Product results -->
+      <div class="results-panel">
+        <div class="results-header">
+          <div id="resultsLabel" class="results-label">Showing results</div>
+        </div>
+
+        <div id="products" class="product-list"></div>
+
+        <div id="loadingState" class="loading-state" style="display:none">
+          <div class="loading-spinner"></div>
+          <p>Scanning 5 platforms for the best prices...</p>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          </div>
+          <p class="empty-title">No products yet</p>
+          <p class="empty-desc">Search for any product to see price comparison across all 5 platforms.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: AI Chat -->
+      <div class="chat-panel">
+        <div class="chat-header">
+          <div class="chat-header-top">
+            <div class="ai-status-dot"></div>
+            <span class="chat-title">AI Shopping Assistant</span>
+          </div>
+          <p class="chat-sub">Ask about products, budgets, or comparisons</p>
+        </div>
+
+        <div id="messages" class="messages"></div>
+
+        <div class="composer">
+          <textarea id="message" placeholder="Ask about features, compare products, best deals..." rows="1"></textarea>
+          <button id="send">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+
+        <!-- Quick action chips -->
+        <div class="quick-chips">
+          <button class="qchip" onclick="quickChat('Which has the best battery life?')">🔋 Best battery?</button>
+          <button class="qchip" onclick="quickChat('Which platform has the lowest price?')">💰 Lowest price?</button>
+          <button class="qchip" onclick="quickChat('Which one is best for daily use?')">⭐ Best for daily use?</button>
+          <button class="qchip" onclick="quickChat('Is this a good deal?')">🤔 Good deal?</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
